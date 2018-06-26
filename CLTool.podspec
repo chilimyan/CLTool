@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "CLTool"
-  s.version      = "0.0.3"
+  s.version      = "0.0.4"
   s.summary      = "项目的基础工具模块"
 
   # This description is used to generate tags and improve search results.
