@@ -33,5 +33,5 @@
  @param imageName 图片名称
  @return 返回Image
  */
-- (UIImage *)cl_imageFromBundle:(NSString *)bundle imageName:(NSString *)imageName;
++ (UIImage *)cl_imageFromBundle:(NSString *)bundle imageName:(NSString *)imageName;
 @end
