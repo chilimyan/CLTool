@@ -97,4 +97,10 @@
     return scaledImage;
 }
 
+- (UIImage *)cl_imageFromBundle:(NSString *)bundle imageName:(NSString *)imageName{
+    NSString *bundlePath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:bundle];
+    NSString *img_path = [bundlePath stringByAppendingPathComponent:imageName];
+    return [UIImage imageWithContentsOfFile:img_path];
+}
+
 @end
