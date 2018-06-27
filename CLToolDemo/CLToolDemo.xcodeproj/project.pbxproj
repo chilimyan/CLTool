@@ -29,6 +29,7 @@
 		187D384720AA770C00BE2792 /* NSObject+CLBlockTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 187D383520AA770C00BE2792 /* NSObject+CLBlockTool.m */; };
 		187D384820AA770C00BE2792 /* CLFileTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 187D383720AA770C00BE2792 /* CLFileTool.m */; };
 		187D384920AA770C00BE2792 /* CLSystemTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 187D383820AA770C00BE2792 /* CLSystemTool.m */; };
+		18A0E86220E3A0B800058B5F /* NSTimer+CLTimerTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0E86120E3A0B800058B5F /* NSTimer+CLTimerTool.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,6 +100,8 @@
 		187D383920AA770C00BE2792 /* CLSystemTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLSystemTool.h; sourceTree = "<group>"; };
 		187D383A20AA770C00BE2792 /* CLFileTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLFileTool.h; sourceTree = "<group>"; };
 		187D383B20AA770C00BE2792 /* CLSystemMacroTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLSystemMacroTool.h; sourceTree = "<group>"; };
+		18A0E86020E3A0B800058B5F /* NSTimer+CLTimerTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+CLTimerTool.h"; sourceTree = "<group>"; };
+		18A0E86120E3A0B800058B5F /* NSTimer+CLTimerTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+CLTimerTool.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -277,6 +280,8 @@
 		187D383620AA770C00BE2792 /* SystemTool */ = {
 			isa = PBXGroup;
 			children = (
+				18A0E86020E3A0B800058B5F /* NSTimer+CLTimerTool.h */,
+				18A0E86120E3A0B800058B5F /* NSTimer+CLTimerTool.m */,
 				187D383720AA770C00BE2792 /* CLFileTool.m */,
 				187D383820AA770C00BE2792 /* CLSystemTool.m */,
 				187D383920AA770C00BE2792 /* CLSystemTool.h */,
@@ -436,6 +441,7 @@
 				187D384920AA770C00BE2792 /* CLSystemTool.m in Sources */,
 				187D384120AA770C00BE2792 /* UILabel+CLTool.m in Sources */,
 				187D384320AA770C00BE2792 /* UIView+CLTool.m in Sources */,
+				18A0E86220E3A0B800058B5F /* NSTimer+CLTimerTool.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

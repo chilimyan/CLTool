@@ -7,6 +7,7 @@
 //
 #import "CLSystemTool.h"
 #import "CLFileTool.h"
+#import "NSTimer+CLTimerTool.h"
 /**
  *  去除performSelector警告
  *
