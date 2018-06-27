@@ -12,19 +12,55 @@
 
 
 /**
- 修正图片的方向
-
- @return <#return value description#>
+ 纠正图片的方向
+ 
+ @return 新的Image
  */
 - (UIImage *)cl_fixOrientation;
 
-/**
- 有损压缩图片大小
-
- @param newSize 要压缩到多大
- @return <#return value description#>
- */
 - (UIImage *)cl_clipImage:(CGSize)newSize;
+
+/**
+ 按给定的方向旋转图片
+ 
+ @return 新的Image
+ */
+- (UIImage*)cl_rotate:(UIImageOrientation)orient;
+
+/**
+ 垂直翻转
+ 
+ @return 新的Image
+ */
+- (UIImage *)cl_flipVertical;
+
+/**
+ 水平翻转
+ 
+ @return 新的Image
+ */
+- (UIImage *)cl_flipHorizontal;
+
+/**
+ 将图片旋转degrees角度
+ 
+ @return 新的Image
+ */
+- (UIImage *)cl_imageRotatedByDegrees:(CGFloat)degrees;
+
+/**
+ 将图片旋转radians弧度
+ 
+ @return 新的Image
+ */
+- (UIImage *)cl_imageRotatedByRadians:(CGFloat)radians;
+
+/**
+ 获取某一个空间的截屏
+ 
+ @return 新的Image
+ */
++(UIImage *)cl_screenShotsOfView:(UIView *)view;
 
 /**
  从Bundle文件获取图片

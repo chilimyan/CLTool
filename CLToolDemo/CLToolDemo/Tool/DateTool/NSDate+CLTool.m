@@ -143,17 +143,17 @@
     
     long long  distance= now - timeNow;
     if(distance<60)
-    string=@"刚刚";
+        string=@"刚刚";
     else if(distance<60*60)
-    string=[NSString stringWithFormat:@"%lld分钟前",distance/60];
+        string=[NSString stringWithFormat:@"%lld分钟前",distance/60];
     else if(distance<60*60*24)
-    string=[NSString stringWithFormat:@"%lld小时前",distance/60/60];
+        string=[NSString stringWithFormat:@"%lld小时前",distance/60/60];
     else if(distance<60*60*24*7)
-    string=[NSString stringWithFormat:@"%lld天前",distance/60/60/24];
+        string=[NSString stringWithFormat:@"%lld天前",distance/60/60/24];
     else if(year==t_year)
-    string=[NSString stringWithFormat:@"%ld月%ld日",(long)month,(long)day];
+        string=[NSString stringWithFormat:@"%ld月%ld日",(long)month,(long)day];
     else
-    string=[NSString stringWithFormat:@"%ld年%ld月%ld日",(long)year,(long)month,(long)day];
+        string=[NSString stringWithFormat:@"%ld年%ld月%ld日",(long)year,(long)month,(long)day];
     
     return string;
 }
@@ -219,7 +219,7 @@
 - (NSInteger)cl_getMonthWeeksCount{
     NSUInteger weekOfFirstDay = [[self cl_beginOfMonth] cl_getWeekDay];
     NSUInteger numberDaysInMonth = [self cl_getMonthCount];
-
+    
     return ((weekOfFirstDay - 1 + numberDaysInMonth) % 7) ? ((weekOfFirstDay - 1 + numberDaysInMonth) / 7 + 1): ((weekOfFirstDay - 1 + numberDaysInMonth) / 7);
 }
 
@@ -274,6 +274,85 @@
     return [calendar dateByAddingComponents:components toDate:self options:0];
 }
 
+- (NSDate *)cl_dateByAddingYears:(NSInteger)years{
+    NSCalendar *calendar = [[self class] cl_sharedCalender];
+    NSDateComponents *components = [[NSDateComponents alloc] init];
+    [components setYear:years];
+    return [calendar dateByAddingComponents:components toDate:self options:0];
+}
+
+- (NSDate *)cl_dateByAddingMonths:(NSInteger)months{
+    NSCalendar *calendar = [[self class] cl_sharedCalender];
+    NSDateComponents *components = [[NSDateComponents alloc] init];
+    [components setMonth:months];
+    return [calendar dateByAddingComponents:components toDate:self options:0];
+}
+
+- (NSDate *)cl_dateByAddingHours:(NSInteger)hours{
+    NSCalendar *calendar = [[self class] cl_sharedCalender];
+    NSDateComponents *components = [[NSDateComponents alloc] init];
+    [components setHour:hours];
+    
+    return [calendar dateByAddingComponents:components toDate:self options:0];
+}
+
+- (NSDate *)cl_dateByAddingMinutes:(NSInteger)minutes{
+    NSCalendar *calendar = [[self class] cl_sharedCalender];
+    NSDateComponents *components = [[NSDateComponents alloc] init];
+    [components setMinute:minutes];
+    
+    return [calendar dateByAddingComponents:components toDate:self options:0];
+}
+
+- (NSDate *)cl_dateByAddingSeconds:(NSInteger)seconds{
+    NSCalendar *calendar = [[self class] cl_sharedCalender];
+    NSDateComponents *components = [[NSDateComponents alloc] init];
+    [components setSecond:seconds];
+    
+    return [calendar dateByAddingComponents:components toDate:self options:0];
+}
+
+-(NSInteger)cl_yearsFrom:(NSDate *)date{
+    NSCalendar *calendar = [[self class] cl_sharedCalender];
+    
+    NSDate *earliest = [self earlierDate:date];
+    NSDate *latest = (earliest == self) ? date : self;
+    NSInteger multiplier = (earliest == self) ? -1 : 1;
+    NSDateComponents *components = [calendar components:NSCalendarUnitYear fromDate:earliest toDate:latest options:0];
+    return multiplier*components.year;
+}
+
+-(NSInteger)cl_monthsFrom:(NSDate *)date{
+    NSCalendar *calendar = [[self class] cl_sharedCalender];
+    
+    NSDate *earliest = [self earlierDate:date];
+    NSDate *latest = (earliest == self) ? date : self;
+    NSInteger multiplier = (earliest == self) ? -1 : 1;
+    NSInteger unitFlags = NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitYear | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond | NSCalendarUnitWeekOfMonth | NSCalendarUnitWeekOfYear | NSCalendarUnitWeekday ;
+    NSDateComponents *components = [calendar components:unitFlags fromDate:earliest toDate:latest options:0];
+    return multiplier*(components.month + 12*components.year);
+}
+
+-(NSInteger)cl_weeksFrom:(NSDate *)date{
+    NSCalendar *calendar = [[self class] cl_sharedCalender];
+    
+    NSDate *earliest = [self earlierDate:date];
+    NSDate *latest = (earliest == self) ? date : self;
+    NSInteger multiplier = (earliest == self) ? -1 : 1;
+    NSDateComponents *components = [calendar components:NSCalendarUnitWeekOfYear fromDate:earliest toDate:latest options:0];
+    return multiplier*components.weekOfYear;
+}
+
+-(NSInteger)cl_daysFrom:(NSDate *)date{
+    NSCalendar *calendar = [[self class] cl_sharedCalender];
+    
+    NSDate *earliest = [self earlierDate:date];
+    NSDate *latest = (earliest == self) ? date : self;
+    NSInteger multiplier = (earliest == self) ? -1 : 1;
+    NSDateComponents *components = [calendar components:NSCalendarUnitDay fromDate:earliest toDate:latest options:0];
+    return multiplier*components.day;
+}
+
 - (BOOL)cl_isToday{
     NSCalendar *cal = [NSCalendar currentCalendar];
     NSDateComponents *components = [cal components:(NSCalendarUnitEra|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay) fromDate:[NSDate date]];
@@ -312,6 +391,7 @@
     NSDate *dateTwo = [cal dateFromComponents:components];
     return [dateOne isEqualToDate:dateTwo];
 }
+
 
 @end
 

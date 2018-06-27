@@ -9,6 +9,11 @@
 
 #import "UIImage+CLTool.h"
 
+//由角度转换弧度
+#define kDegreesToRadian(x)      (M_PI * (x) / 180.0)
+//由弧度转换角度
+#define kRadianToDegrees(radian) (radian * 180.0) / (M_PI)
+
 @implementation UIImage (CLTool)
 
 - (UIImage *)cl_fixOrientation
@@ -88,7 +93,7 @@
     return img;
 }
 
-
+///缩放图片到指定大小
 - (UIImage *)cl_clipImage:(CGSize)newSize{
     UIGraphicsBeginImageContext(newSize);
     [self drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
@@ -97,11 +102,173 @@
     return scaledImage;
 }
 
+
+/** 按给定的方向旋转图片 */
+- (UIImage*)cl_rotate:(UIImageOrientation)orient
+{
+    CGRect bnds = CGRectZero;
+    UIImage* copy = nil;
+    CGContextRef ctxt = nil;
+    CGImageRef imag = self.CGImage;
+    CGRect rect = CGRectZero;
+    CGAffineTransform tran = CGAffineTransformIdentity;
+    
+    rect.size.width = CGImageGetWidth(imag);
+    rect.size.height = CGImageGetHeight(imag);
+    
+    bnds = rect;
+    
+    switch (orient)
+    {
+        case UIImageOrientationUp:
+            return self;
+            
+        case UIImageOrientationUpMirrored:
+            tran = CGAffineTransformMakeTranslation(rect.size.width, 0.0);
+            tran = CGAffineTransformScale(tran, -1.0, 1.0);
+            break;
+            
+        case UIImageOrientationDown:
+            tran = CGAffineTransformMakeTranslation(rect.size.width,
+                                                    rect.size.height);
+            tran = CGAffineTransformRotate(tran, M_PI);
+            break;
+            
+        case UIImageOrientationDownMirrored:
+            tran = CGAffineTransformMakeTranslation(0.0, rect.size.height);
+            tran = CGAffineTransformScale(tran, 1.0, -1.0);
+            break;
+            
+        case UIImageOrientationLeft:
+            bnds = swapWidthAndHeight(bnds);
+            tran = CGAffineTransformMakeTranslation(0.0, rect.size.width);
+            tran = CGAffineTransformRotate(tran, 3.0 * M_PI / 2.0);
+            break;
+            
+        case UIImageOrientationLeftMirrored:
+            bnds = swapWidthAndHeight(bnds);
+            tran = CGAffineTransformMakeTranslation(rect.size.height,
+                                                    rect.size.width);
+            tran = CGAffineTransformScale(tran, -1.0, 1.0);
+            tran = CGAffineTransformRotate(tran, 3.0 * M_PI / 2.0);
+            break;
+            
+        case UIImageOrientationRight:
+            bnds = swapWidthAndHeight(bnds);
+            tran = CGAffineTransformMakeTranslation(rect.size.height, 0.0);
+            tran = CGAffineTransformRotate(tran, M_PI / 2.0);
+            break;
+            
+        case UIImageOrientationRightMirrored:
+            bnds = swapWidthAndHeight(bnds);
+            tran = CGAffineTransformMakeScale(-1.0, 1.0);
+            tran = CGAffineTransformRotate(tran, M_PI / 2.0);
+            break;
+            
+        default:
+            return self;
+    }
+    
+    UIGraphicsBeginImageContext(bnds.size);
+    ctxt = UIGraphicsGetCurrentContext();
+    
+    switch (orient)
+    {
+        case UIImageOrientationLeft:
+        case UIImageOrientationLeftMirrored:
+        case UIImageOrientationRight:
+        case UIImageOrientationRightMirrored:
+            CGContextScaleCTM(ctxt, -1.0, 1.0);
+            CGContextTranslateCTM(ctxt, -rect.size.height, 0.0);
+            break;
+            
+        default:
+            CGContextScaleCTM(ctxt, 1.0, -1.0);
+            CGContextTranslateCTM(ctxt, 0.0, -rect.size.height);
+            break;
+    }
+    
+    CGContextConcatCTM(ctxt, tran);
+    CGContextDrawImage(UIGraphicsGetCurrentContext(), rect, imag);
+    
+    copy = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return copy;
+}
+
+/** 垂直翻转 */
+- (UIImage *)cl_flipVertical
+{
+    return [self cl_rotate:UIImageOrientationDownMirrored];
+}
+
+/** 水平翻转 */
+- (UIImage *)cl_flipHorizontal
+{
+    return [self cl_rotate:UIImageOrientationUpMirrored];
+}
+
+/** 将图片旋转弧度radians */
+- (UIImage *)cl_imageRotatedByRadians:(CGFloat)radians
+{
+    // calculate the size of the rotated view's containing box for our drawing space
+    UIView *rotatedViewBox = [[UIView alloc] initWithFrame:CGRectMake(0,0,self.size.width, self.size.height)];
+    CGAffineTransform t = CGAffineTransformMakeRotation(radians);
+    rotatedViewBox.transform = t;
+    CGSize rotatedSize = rotatedViewBox.frame.size;
+    
+    // Create the bitmap context
+    UIGraphicsBeginImageContext(rotatedSize);
+    CGContextRef bitmap = UIGraphicsGetCurrentContext();
+    
+    // Move the origin to the middle of the image so we will rotate and scale around the center.
+    CGContextTranslateCTM(bitmap, rotatedSize.width/2, rotatedSize.height/2);
+    
+    //   // Rotate the image context
+    CGContextRotateCTM(bitmap, radians);
+    
+    // Now, draw the rotated/scaled image into the context
+    CGContextScaleCTM(bitmap, 1.0, -1.0);
+    CGContextDrawImage(bitmap, CGRectMake(-self.size.width / 2, -self.size.height / 2, self.size.width, self.size.height), [self CGImage]);
+    
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return newImage;
+}
+
+/** 将图片旋转角度degrees */
+- (UIImage *)cl_imageRotatedByDegrees:(CGFloat)degrees
+{
+    return [self cl_imageRotatedByRadians:kDegreesToRadian(degrees)];
+}
+
+/** 交换宽和高 */
+static CGRect swapWidthAndHeight(CGRect rect)
+{
+    CGFloat swap = rect.size.width;
+    
+    rect.size.width = rect.size.height;
+    rect.size.height = swap;
+    
+    return rect;
+}
+
++(UIImage*)cl_screenShotsOfView:(UIView *)view{
+    CGSize size = view.frame.size;
+    UIGraphicsBeginImageContextWithOptions(size, NO, [UIScreen mainScreen].scale);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [view.layer renderInContext:context];
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return img;
+}
+
 + (UIImage *)cl_imageFromBundle:(NSString *)bundle imageName:(NSString *)imageName{
     NSString *bundlePath = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:bundle];
     NSString *img_path = [bundlePath stringByAppendingPathComponent:imageName];
     return [UIImage imageWithContentsOfFile:img_path];
 }
-
 
 @end

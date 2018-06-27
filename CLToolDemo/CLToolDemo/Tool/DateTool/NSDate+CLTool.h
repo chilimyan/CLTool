@@ -18,14 +18,14 @@ static NSString *NSDateHelperFormatTimeInterval       = @"yyyyMMddHHmmss";
 
 /**
  日期转字符串
-
+ 
  @return  返回yyyy-MM-dd格式的日期字符串
  */
 - (NSString *)cl_dateToString;
 
 /**
  字符串转日期
-
+ 
  @param string 要转为日期的字符串
  @return 返回yyyy-MM-dd格式的日期
  */
@@ -33,14 +33,14 @@ static NSString *NSDateHelperFormatTimeInterval       = @"yyyyMMddHHmmss";
 
 /**
  日期转字符串
-
+ 
  @return 返回yyyy-MM-dd HH:mm:ss格式的日期字符串
  */
 - (NSString *)cl_dateToStringWithSecond;
 
 /**
  字符串转日期
-
+ 
  @param string 要转为日期的字符串
  @return 返回yyyy-MM-dd HH:mm:ss格式的日期
  */
@@ -48,14 +48,14 @@ static NSString *NSDateHelperFormatTimeInterval       = @"yyyyMMddHHmmss";
 
 /**
  日期转字符串
-
+ 
  @return 返回yyyy-MM-dd HH:mm格式的日期字符串
  */
 - (NSString *)cl_dateToStringNoSecond;
 
 /**
  字符串转日期
-
+ 
  @param string 要转为日期的字符串
  @return 返回yyyy-MM-dd HH:mm格式的日期
  */
@@ -63,7 +63,7 @@ static NSString *NSDateHelperFormatTimeInterval       = @"yyyyMMddHHmmss";
 
 /**
  自定义字符串转日期
-
+ 
  @param string 要转为日期的字符串
  @param format 日期格式
  @return 返回自定义的日期形式
@@ -72,7 +72,7 @@ static NSString *NSDateHelperFormatTimeInterval       = @"yyyyMMddHHmmss";
 
 /**
  自定义日期转字符串
-
+ 
  @param date 要转为字符串的日期
  @param format 日期格式
  @return 返回自定义日期格式的字符串
@@ -80,71 +80,103 @@ static NSString *NSDateHelperFormatTimeInterval       = @"yyyyMMddHHmmss";
 - (NSString *)cl_dateToString:(NSDate *)date format:(NSString *)format;
 /**
  日期转字符串
-
+ 
  @return 返回yyyyMMddHHmmss格式的日期
  */
 - (NSString *)cl_dateToStringTimeInterval;
 
 /**
  获取当前日期的年份
-
+ 
  @return 返回年份
  */
 - (NSInteger)cl_getYear;
 
 /**
  获取当前日期的月份
-
+ 
  @return 返回月份
  */
 - (NSInteger)cl_getMonth;
 
 /**
  获取当前日期的天
-
+ 
  @return 返回天
  */
 - (NSInteger)cl_getDay;
 
 /**
  返回当前日期的小时
-
+ 
  @return 返回小时
  */
 - (NSInteger)cl_getHour;
 
 /**
  返回当前日期的分钟
-
+ 
  @return 返回分钟
  */
 - (NSInteger)cl_getMinute;
 
 /**
  返回当前日期的秒数
-
+ 
  @return 返回秒
  */
 - (NSInteger)cl_getSecondes;
 
 /**
  相对于当前日期过去多少时间
-
+ 
  @return 相对于当前日期过去多少时间的字符串
  */
 - (NSString *)cl_timeAgoSinceNow;
 
 /**
  获取两个时间差
-
+ 
  @param date 参照的日期
  @return 返回两个时间相差多少秒，当前日期大于date时返回值<0，否则返回值>0
  */
 - (long long)cl_distanceWithDate:(NSDate *)date;
 
 /**
- 获取当前日期是星期几
+ 获取两个日期相差多少天
+ 
+ @param date 参照的日期
+ @return 返回两个日期相差的天数
+ */
+-(NSInteger)cl_daysFrom:(NSDate *)date;
 
+/**
+ 获取两个日期相差多少周
+ 
+ @param date 参照的日期
+ @return 返回两个日期相差的周数
+ */
+-(NSInteger)cl_weeksFrom:(NSDate *)date;
+
+/**
+ 获取两个日期相差多少个月
+ 
+ @param date 参照的日期
+ @return 返回两个日期相差的月数
+ */
+-(NSInteger)cl_monthsFrom:(NSDate *)date;
+
+/**
+ 获取两个日期相差多少年
+ 
+ @param date 参照的日期
+ @return 返回两个日期相差的年数
+ */
+-(NSInteger)cl_yearsFrom:(NSDate *)date;
+
+/**
+ 获取当前日期是星期几
+ 
  @return 返回星期几，iOS中规定的就是周日为1，周一为2，周二为3，周三为4，周四为5，周五为6，周六为7
  */
 - (NSInteger)cl_getWeekDay;
@@ -157,7 +189,7 @@ static NSString *NSDateHelperFormatTimeInterval       = @"yyyyMMddHHmmss";
 
 /**
  当前日期属于全年的第几周
-
+ 
  @return 返回第几周
  */
 - (NSInteger)cl_getWeekNumberYear;
@@ -171,21 +203,21 @@ static NSString *NSDateHelperFormatTimeInterval       = @"yyyyMMddHHmmss";
 
 /**
  当前日期所在月份有多少天
-
+ 
  @return 返回这个月的总天数
  */
 - (NSInteger)cl_getMonthCount;
 
 /**
  传入日期所在月有多少周
-
+ 
  @return 返回这个月的周数
  */
 - (NSInteger)cl_getMonthWeeksCount;
 
 /**
  获取当前日期所在月的第一天
-
+ 
  @return 返回第一天
  */
 - (NSDate *)cl_beginOfMonth;
@@ -220,8 +252,48 @@ static NSString *NSDateHelperFormatTimeInterval       = @"yyyyMMddHHmmss";
 - (NSDate *)cl_dateByAddingDays:(NSInteger)day;
 
 /**
- 判断当前日期是不是今天
+ 返回在当前日期基础上相隔年份的新日期
+ 
+ @param years 相隔的年份
+ @return 返回新的日期
+ */
+- (NSDate *)cl_dateByAddingYears:(NSInteger)years;
 
+/**
+ 返回在当前日期基础上相隔月份的新日期
+ 
+ @param months 相隔的月份
+ @return 返回新的日期
+ */
+- (NSDate *)cl_dateByAddingMonths:(NSInteger)months;
+
+/**
+ 返回在当前日期基础上相隔小时的新日期
+ 
+ @param hours 相隔的小时
+ @return 返回新的日期
+ */
+- (NSDate *)cl_dateByAddingHours:(NSInteger)hours;
+
+/**
+ 返回在当前日期基础上相隔分钟的新日期
+ 
+ @param minutes 相隔的分钟
+ @return 返回新的日期
+ */
+- (NSDate *)cl_dateByAddingMinutes:(NSInteger)minutes;
+
+/**
+ 返回在当前日期基础上相隔秒数的新日期
+ 
+ @param seconds 相隔的秒数
+ @return 返回新的日期
+ */
+- (NSDate *)cl_dateByAddingSeconds:(NSInteger)seconds;
+
+/**
+ 判断当前日期是不是今天
+ 
  @return 是今天返回YES，否则返回NO
  */
 - (BOOL)cl_isToday;
@@ -235,17 +307,18 @@ static NSString *NSDateHelperFormatTimeInterval       = @"yyyyMMddHHmmss";
 
 /**
  判断当前日期是不是昨天
-
+ 
  @return 是昨天返回YES，否则返回NO
  */
 - (BOOL)cl_isYesterday;
 
 /**
  判断当前日期是否和date是同一天
-
+ 
  @param date 要比较的日期
  @return 同一天返回YES，否则返回NO
  */
 -(BOOL)cl_isSameDay:(NSDate *)date;
+
 
 @end
